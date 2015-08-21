@@ -1,0 +1,117 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../neon-animation/animations/slide-down-animation.html">
+<link rel="import" href="../neon-animation/animations/slide-up-animation.html">
+<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
+
+<link rel="import" href="../ll-theme/ll-theme.html">
+<link rel="import" href="../ll-paper-button/ll-paper-button.html">
+
+<!--
+An element providing a solution to no problem in particular.
+Example:
+    <ll-modal></ll-modal>
+@element ll-modal
+@demo demo/index.html
+-->
+
+<dom-module id="ll-modal">
+    <style>
+        :host {
+            font-family: Roboto, Helvetica, Arial, sans-serif;
+            text-align: left;
+        }
+        paper-dialog {
+            padding: 16px;
+            border-radius: 10px;
+            background: #fff;
+            color: #000;
+            width: 98%;
+            height: 50%;
+        }
+        ll-paper-button, paper-button {
+            width: 100%;
+            height: auto;
+            padding: 0 25%;
+            background-color: #0069AA;
+            border-radius: 5rem;
+            color: #ffffff;
+            text-transform: none;
+            -webkit-transition: all ease 0.25s;
+            -moz-transition: all ease 0.25s;
+            -o-transition: all ease 0.25s;
+            transition: all ease 0.25s;
+        }
+
+        ll-paper-button, paper-button:hover {
+            background-color: #005183;
+        }
+
+        paper-button::shadow paper-ripple {
+            color: #ffffff;
+        }
+    </style>
+
+    <template>
+        <paper-dialog id="curtain" modal entry-animation="slide-down-animation" exit-animation="slide-up-animation">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Title</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Body content</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <button dialog-dismiss class="btn btn-primary">Cancel</button>
+                    <button dialog-confirm autofocus class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'll-modal',
+            properties: {
+                opened: {
+                    type: Boolean,
+                    value: false
+                },
+                openButton: {
+                    type: String,
+                    value: 'open',
+                    name: 'open'
+                }
+            },
+            /**
+             * adds logic for a button that toggles to fire `show()` and `hide()` methods
+             */
+            toggle: function() {
+                if (!this.opened) {
+                    this.show();
+                } else {
+                    this.close();
+                }
+            },
+            /**
+             * opens modal
+             */
+            show: function () {
+                this.opened = true;
+                this.$.curtain.open();
+          },
+            /**
+             * closes modals
+             */
+            close: function () {
+                this.opened = false;
+                this.$.curtain.close();
+          }
+        });
+    </script>
+
+</dom-module>

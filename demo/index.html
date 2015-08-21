@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>ll-modal Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../ll-modal.html">
+    <style media="screen">
+    </style>
+  </head>
+  <body>
+
+    <div class="container button-container">
+
+      <!-- sample button to call modal -->
+      <button class="btn btn-default" onclick="show()">Open Modal</button>
+
+    </div>
+
+    <ll-modal></ll-modal>
+
+    <script type="text/javascript">
+        var modal = document.querySelector('ll-modal');
+        function show() {
+          modal.show();
+        }
+
+        function toggle () {
+          modal.toggle();
+        }
+
+    </script>
+  </body>
+</html>

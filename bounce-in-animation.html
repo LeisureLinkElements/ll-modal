@@ -1,0 +1,54 @@
+<link rel="import" href="./bower_components/polymer/polymer.html">
+<link rel="import" href="./bower_components/neon-animation/neon-animation-behavior.html">
+<link rel="import" href="./bower_components/neon-animation/web-animations.html">
+
+<!--
+`<bounce-in-animation>` animates the scale transform of an element from 0 to 1.
+
+Configuration:
+```
+{
+  name: 'bounce-in-animation',
+  node: <node>,
+  transformOrigin: <transform-origin>,
+  timing: <animation-timing>
+}
+```
+-->
+
+<script>
+
+  Polymer({
+
+    is: 'bounce-in-animation',
+
+    behaviors: [
+      Polymer.NeonAnimationBehavior
+    ],
+
+    configure: function(config) {
+      var node = config.node;
+
+      if (config.transformOrigin) {
+        this.setPrefixedProperty(node, 'transformOrigin', config.transformOrigin);
+      }
+
+      // Remove the offsets to have the keyframes evenly
+      // distributed over the life of the animation
+      this._effect = new KeyframeEffect(node, [
+        {offset: 0.0, 'transform': 'translateY(0)'},
+        {offset: 0.60, 'transform': 'translateY(50%)'},
+        {offset: 0.65, 'transform': 'translateY(37%)'},
+        {offset: 0.70, 'transform': 'translateY(50%)'},
+        {offset: 0.75, 'transform': 'translateY(39%)'},
+        {offset: 0.87, 'transform': 'translateY(50%)'},
+        {offset: 0.95, 'transform': 'translateY(46%)'},
+        {offset: 1.0, 'transform': 'translateY(50%)'}
+      ], this.timingFromConfig(config));
+
+      return this._effect;
+    }
+
+  });
+
+</script>
