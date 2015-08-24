@@ -1,12 +1,31 @@
+<!--<script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>-->
+
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../neon-animation/animations/slide-down-animation.html">
 <link rel="import" href="../neon-animation/animations/slide-up-animation.html">
 <link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../iron-input/iron-input.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+
+<link rel="import" href="aha-table.html">
+<link rel="import" href="../font-awesome/css/font-awesome.min.css">
 
 <link rel="import" href="../ll-theme/ll-theme.html">
 <link rel="import" href="../ll-paper-button/ll-paper-button.html">
 <link rel="import" href="../ll-modal/ll-modal.html">
+
+
+<!-- Importing Custom Elements for Aha-Table-->
+<link rel="import" href="aha-table.html">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+<!-- used when shadow dom is natively implemented -->
+<link rel="import" href="css/theme.css">
+<!-- used when shadow dom is not implemented -->
+<link rel="stylesheet" href="css/theme-shim.css">
 
 <!--
 An element providing a solution to no problem in particular.
@@ -26,27 +45,155 @@ Example:
       box-sizing: border-box;
     }
 
+    paper-dialog {
+      width: 98%;
+    }
+
+    i {
+      color: #3697D3;
+    }
+
   </style>
 
   <template>
 
-    <button class="btn btn-default" onclick="show()">Open Modal</button>
 
     <paper-dialog id="curtain" modal entry-animation="slide-down-animation" exit-animation="slide-up-animation">
       <div class="row">
         <div class="col-md-12">
-          <h2>Title</h2>
+          <h2>Apply Fee to Properties</h2>
         </div>
       </div>
       <div class="row">
+        <div class="col-md-3">
+          <iron-icon icon="icons:search"></iron-icon><input is="iron-input" placeholder="Search Properties"/>
+        </div>
+      </div>
+
+        <aha-table id="raw"></aha-table>
+
+      <div class="row">
         <div class="col-md-12">
-          <p>Body content</p>
+
+          <aha-table id="themed"
+
+                     selectable
+                     searchable
+                     copyable
+
+                     pagesize="10"
+                     data-sizelist="[2,5,10,20,50]"
+
+                     pagesizetext=""
+                     summarytext=""
+                     pagetext=""
+                     pageoftext="of"
+                     itemoftext="of"
+
+                     searchtitle="Show/Hide Filters"
+                     sorttitle="click to sort"
+                     selecttitle="click to select"
+                     selectalltitle="click to select/deselect all"
+                     edittitle="click to edit"
+                     copytitle="click to copy"
+                     removetitle="click to remove"
+                     movedowntitle="move down"
+                     moveuptitle="move up"
+                     searchtitle="click to show/hide search filters bar"
+                     firsttitle="First"
+                     previoustitle="Previous"
+                     nexttitle="Next"
+                     lasttitle="Last">
+
+              <aha-column name="Property"
+                          type="string"
+
+                          sortable
+                          searchable
+                          required
+
+                          searchplaceholder="Type to filter properties"
+                          placeholder="Properties"
+                          default="">
+
+              </aha-column>
+
+              <aha-column name="Unit"
+                          type="string"
+
+                          sortable
+                          searchable
+                          required
+
+                          searchplaceholder="Type to filter units"
+                          placeholder="Unit"
+                          default="">
+              </aha-column>
+
+              <aha-column name="Floor Plan"
+                          type="choice"
+
+                          searchable
+                          sortable
+                          required
+
+                          placeholder="Event Type"
+                          default="condo"
+                          data-choices='{"":"", "condo":"Condo", "home":"Home", "studio":"Studio"}'>
+              </aha-column>
+
+              <aha-column name="Bedrooms"
+                          type="choice"
+
+                          searchable
+                          sortable
+                          required
+
+                          placeholder="No. of Bedrooms"
+                          default="studio"
+                          data-choices='{"":"", "studio":"Studio", "1BR":"1BR", "2BR":"2BR", "3BR":"3BR", "4BR":"4BR", "5BR":"5BR", "6BR":"6BR", "7BR":"7BR"}'>
+              </aha-column>
+
+              <aha-column name="Bathrooms"
+                          type="string"
+
+                          sortable
+                          searchable
+                          required
+
+                          searchplaceholder="Filter bathrooms"
+                          placeholder="No. of Bathrooms"
+                          default="1 Full">
+              </aha-column>
+
+              <aha-column name="Occupancy"
+                          type="choice"
+
+                          searchable
+                          sortable
+                          required
+
+                          placeholder="Max No. of Occupants"
+                          default="4"
+                          data-choices='{"":"", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8", "9":"9", "10":"10", "11":"11", "12":"12"}'>
+              </aha-column>
+
+
+          </aha-table>
+
+          <!--<BUTTON id="create" onclick="themed.create();">Create</BUTTON>-->
+
+
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12">
-          <button dialog-dismiss class="btn btn-primary">Cancel</button>
-          <button dialog-confirm autofocus class="btn btn-primary">Confirm</button>
+        <div class="col-md-offset-8">
+          <span>
+            <button class="btn btn-default" on-tap="cancelClicked" dialog-dismiss>Cancel</button>
+          </span>
+          <span>
+            <button class="btn btn-primary" on-tap="saveClicked" dialog-confirm autofocus>Save Changes<i class="fa fa-check"></i></button>
+          </span>
         </div>
       </div>
     </paper-dialog>
@@ -56,43 +203,28 @@ Example:
 </dom-module>
 
 <script>
-  Polymer({
+//  (function() {
+//    this._open();
+//  }());
 
+  var modal = document.querySelector('ll-search-modal');
+  Polymer({
     is: 'll-search-modal',
 
     properties: {
+      opened: {
+        type: Boolean,
+        value: false
+      },
+      listeners: {
+        'click': 'toggle'
+      },
 
       /**
        * `fancy` indicates that the element should don a monocle and tophat,
        * while checking its pocket watch.
        */
-      fancy: Boolean,
-
-      /**
-       * Describes the author of the element, but is really just an excuse to
-       * show off JSDoc annotations.
-       *
-       * @type {{name: string, image: string}}
-       */
-      author: {
-        type: Object,
-        // Use `value` to provides a default value for a property, by setting it
-        // on your element's prototype.
-        //
-        // If you provide a function, as we do here, Polymer will call that
-        // _per element instance_.
-        //
-        // We do that to ensure that each element gets its own copy of the
-        // value, rather than having it shared across all instances (via the
-        // prototype).
-        value: function() {
-          return {
-            name:  'Dimitri Glazkov',
-            image: 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg',
-          };
-        }
-      },
-
+      fancy: Boolean
     },
 
     // Element Lifecycle
@@ -150,36 +282,36 @@ Example:
       this.$.curtain.close();
     },
 
-    // Element Behavior
-
-    /**
-     * The `ll-search-modal-lasers` event is fired whenever `fireLasers` is called.
-     *
-     * @event ll-search-modal-lasers
-     * @detail {{sound: String}}
-     */
-
-    /**
-     * Sometimes it's just nice to say hi.
-     *
-     * @param {string} greeting A positive greeting.
-     * @return {string} The full greeting.
-     */
-    sayHello: function(greeting) {
-      var response = greeting || 'Hello World!';
-      return 'll-search-modal says, ' + response;
+    saveClicked: function() {
+      console.log('saved!');
+      this._close();
     },
 
-    /**
-     * Attempts to destroy this element's enemies with an any beam of light!
-     *
-     * Or, at least, dispatches an event in the vain hope that someone else will
-     * do the zapping.
-     */
-    fireLasers: function() {
-      this.fire('ll-search-modal-lasers', {sound: 'Pew pew!'});
+    cancelClicked: function(){
+      console.log('cancelled!');
+      this._close();
     }
-
   });
 
+</script>
+
+<script>
+    var events = [
+        { title: "gym", date: new Date().toISOString().slice(0, 10), type: "private", content: "5*20 situps, 5 miles running, 5 minutes PLANKS", enabled: true, html: "<a href='http://www.google.com'>Search</a>" },
+        { title: "breakfast", date: new Date().toISOString().slice(0, 10), type: "private", enabled: true },
+        { title: "work", date: new Date().toISOString().slice(0, 10), type: "public", content: "implement aha-table plymer element", enabled: true },
+        { title: "lunch", date: new Date().toISOString().slice(0, 10), type: "public", content: null, enabled: false },
+        { title: "work", date: new Date().toISOString().slice(0, 10), type: "public", content: "implement aha-table plymer element" },
+        { title: "lunch", date: new Date().toISOString().slice(0, 10), type: "public", content: null },
+        { title: "work", date: new Date().toISOString().slice(0, 10), type: "public", content: "implement aha-table plymer element", enabled: true },
+        { title: "", date: new Date().toISOString().slice(0, 10), type: "public", content: null },
+        { title: "work", date: new Date().toISOString().slice(0, 10), type: "public", content: "implement aha-table plymer element", enabled: true },
+        { title: "", date: new Date().toISOString().slice(0, 10), type: "public", content: null },
+        { title: "meeting", date: new Date().toISOString().slice(0, 10), type: "public", content: "introduce web components to the team" },
+        { title: "dinner", date: new Date().toISOString().slice(0, 10), type: "private" }
+    ];
+    var raw = document.getElementById("raw");
+    var themed  = document.getElementById("themed");
+    raw.data = events;
+    themed.data = JSON.parse(JSON.stringify(events));//deep copy so that they have independent data source.
 </script>

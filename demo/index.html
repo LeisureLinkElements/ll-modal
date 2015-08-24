@@ -18,12 +18,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </head>
   <body>
 
-    <ll-search-modal></ll-search-modal>
+
+  <button class="btn btn-default" id="button" onclick="toggle()">Open Modal</button>
+
+  <ll-search-modal></ll-search-modal>
 
     <script>
-      document.querySelector('button').addEventListener('click', function() {
+      var modal = document.querySelector('ll-search-modal');
 
-      });
+      function toggle () {
+        modal.toggle();
+      }
+
     </script>
 
   </body>

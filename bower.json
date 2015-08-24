@@ -24,8 +24,10 @@
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
     "neon-elements": "PolymerElements/neon-elements#^1.0.0",
     "ll-theme": "LeisureLinkElements/ll-theme#~0.0.2",
-    "ll-paper-button": "LeisureLinkElements/ll-paper-button#~0.1.0",
-    "ll-modal": "LeisureLinkElements/ll-modal#~0.1.0"
+    "ll-paper-button": "LeisureLinkElements/ll-paper-button",
+    "ll-modal": "LeisureLinkElements/ll-modal",
+    "aha-table": "~2.0.9",
+    "font-awesome": "~4.4.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
