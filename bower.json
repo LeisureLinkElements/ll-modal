@@ -23,7 +23,7 @@
     "polymer": "Polymer/polymer#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
     "neon-elements": "PolymerElements/neon-elements#^1.0.0",
-    "ll-theme": "LeisureLinkElements/ll-theme#~0.0.1",
+    "ll-theme": "LeisureLinkElements/ll-theme",
     "ll-paper-button": "LeisureLinkElements/ll-paper-button"
   },
   "devDependencies": {
